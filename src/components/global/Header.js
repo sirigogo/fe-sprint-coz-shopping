@@ -3,20 +3,22 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { BsStar } from "react-icons/bs";
 import { SlPresent } from "react-icons/sl";
+
 const Header = () => {
-  const el = useRef();
+  const userMenu = useRef();
   const [isShowing, setIsShowing] = useState(false);
-  const clickEvent = (e) => {
-    if (isShowing && (!el.current || !el.current.contains(e.target)))
-      console.log("aa");
-    setIsShowing(false);
+  const clickHm = () => {
+    setIsShowing(!isShowing);
+  };
+  const clickBody = (e) => {
+    if (isShowing && !userMenu.current.contains(e.target)) setIsShowing();
   };
   useEffect(() => {
-    window.addEventListener("click", clickEvent);
+    window.addEventListener("mousedown", clickBody);
     return () => {
-      window.removeEventListener("click", clickEvent);
+      window.removeEventListener("mousedown", clickBody);
     };
-  }, []);
+  }, [isShowing]);
   return (
     <HeaderWrap>
       <div className="inner">
@@ -30,13 +32,18 @@ const Header = () => {
             <span>COZ Shopping</span>
           </Link>
         </h1>
-        <div className="hm" onClick={clickEvent}>
+        <div className="hm" onClick={clickHm}>
           <span></span>
           <span></span>
           <span></span>
         </div>
         {isShowing && (
-          <div className="headPop" ref={el}>
+          <div className="headPop" ref={userMenu}>
+            <img
+              src={process.env.PUBLIC_URL + "/assets/img/icoPolygon.png"}
+              alt="삼각형"
+              className="popCursor"
+            />
             <ul>
               <li>
                 <Link to="">OOO님, 안녕하세요!</Link>
@@ -65,7 +72,7 @@ const HeaderWrap = styled.header`
   top: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 5rem;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   .inner {
@@ -116,20 +123,12 @@ const HeaderWrap = styled.header`
       top: 80px;
       background-color: #fff;
       border-radius: 10px;
-      box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
-      &:after {
-        content: " ";
+      box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.1);
+      .popCursor {
         position: absolute;
-        top: -10px;
-        right: 40px;
-        bottom: bottom: calc(100% - 1px);
-        height: 0;
-        z-index: -1;
-        border-bottom: 10px solid;
-        border-left: 10px solid rgba(0, 0, 0, 0);
-        border-right: 10px solid rgba(0, 0, 0, 0);
-        color: #000;
-        transform: rotate(0deg);
+        right: 50px;
+        top: -17px;
+        filter: drop-shadow(rgba(0, 0, 0, 0.1) -1px -2px 2px);
       }
       ul {
         li {
