@@ -1,1 +1,1 @@
-# fe-sprint-coz-shopping
+fe-sprint-coz-shopping
