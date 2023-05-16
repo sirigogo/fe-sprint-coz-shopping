@@ -6,7 +6,7 @@ const Home = () => {
     <>
       <div className="inner">
         <section className="itemList">
-          <h3>상품 리스트</h3>
+          <h3>상품 리스트111</h3>
           <div>
             <Item />
           </div>
