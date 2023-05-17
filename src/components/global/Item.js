@@ -1,67 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { FaStar } from "react-icons/fa";
+import { GrClose } from "react-icons/gr";
+import { setBookmarkList } from "../../store/bookmarkList";
 
-const Item = ({ item }) => {
-  //[Product, Category,Exhibition, Brand]
-  console.log(item);
-  return (
-    <ItemBox>
-      {/* {item.type === "Brand" ? (
-        <div
-          className="itemImg"
-          style={{ backgroundImage: `url(${item.brand_image_url})` }}
-        ></div>
-      ) : (
-        <div
-          className="itemImg"
-          style={{ backgroundImage: `url(${item.image_url})` }}
-        ></div>
-      )} */}
-      <div
-        className="itemImg"
-        style={{
-          backgroundImage:
-            item.type === "Brand"
-              ? `url(${item.brand_image_url})`
-              : `url(${item.image_url})`,
-        }}
-      ></div>
-      <div className="itmeTxt">
-        {item.type === "Product" && (
-          <div className="product_area">
-            <p className="title">{item.title}</p>
-            <p className="priceBox">
-              <span className="discount">{item.discountPercentage}</span>
-              <span className="price">{item.price}</span>
-            </p>
-          </div>
-        )}
-        {item.type === "Category" && (
-          <div className="category_area">
-            <p className="title"># {item.title}</p>
-          </div>
-        )}
-        {item.type === "Exhibition" && (
-          <div className="exhibition_area">
-            <p className="title">{item.title}</p>
-            <span className="subTitle">{item.sub_title}</span>
-          </div>
-        )}
-        {item.type === "Brand" && (
-          <div className="brand_area">
-            <p className="title">{item.brand_name}</p>
-            <p className="customerBox">
-              <span>관심고객수</span>
-              <span className="follower">{item.follower}</span>
-            </p>
-          </div>
-        )}
-      </div>
-    </ItemBox>
-  );
-};
 const ItemBox = styled.div`
   width: calc((100% - 72px) / 4);
+  margin-right: 24px;
+  &:nth-child(4n) {
+    margin-right: 0;
+  }
+  cursor: pointer;
   .itemImg {
     width: 100%;
     height: 210px;
@@ -69,6 +19,230 @@ const ItemBox = styled.div`
     overflow: hidden;
     background-position: center;
     background-size: cover;
+    position: relative;
+  }
+  .itemTxt {
+    padding-top: 6px;
+    > div:not(.exhibition_area) {
+      display: flex;
+      justify-content: space-between;
+      > p {
+        span {
+          display: block;
+          text-align: right;
+        }
+      }
+    }
+    .title {
+      font-family: "Inter", sans-serif;
+      font-size: 16px;
+      color: #000;
+      font-weight: 800;
+    }
+  }
+
+  .likePop {
+    position: fixed;
+    bottom: 12px;
+    right: 24px;
+    z-index: 10;
+    .chooseLike {
+      svg {
+        color: #ffd361;
+      }
+    }
+    div {
+      padding: 18px 23px;
+      background-color: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.01);
+      display: flex;
+      margin-top: 10px;
+      svg {
+        color: #dfdfdf;
+      }
+      p {
+        font: 16px;
+        margin-left: 8px;
+      }
+    }
   }
 `;
+const ItemPopWrap = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  left: 0;
+  top: 0;
+  z-index: 10;
+  .itemPopImg {
+    width: 46.5rem;
+    height: 30rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 12px;
+    background-position: center;
+    background-size: cover;
+  }
+`;
+
+const BtnLike = styled.button`
+  border: 0;
+  background-color: transparent;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 1;
+  transition: all 0.2s;
+  &.on {
+    svg {
+      color: #ffd361;
+    }
+  }
+  svg {
+    cursor: pointer;
+    color: #dfdfdf;
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 3px 4px 3px);
+  }
+`;
+
+const Item = ({ item }) => {
+  //[Product, Category,Exhibition, Brand]
+  const dispatch = useDispatch();
+  const { bookmarkList } = useSelector((state) => state);
+  const [currentStatus, setCurrentStatus] = useState("");
+  const [isPop, setIsPop] = useState(false);
+  const wishAdd = (e) => {
+    e.stopPropagation();
+    let copy = [...bookmarkList];
+    if (copy.some((x) => x.id === item.id)) {
+      // 이미 있다면?
+      copy = copy.filter((x) => x.id !== item.id);
+      setCurrentStatus("minus");
+    } else {
+      // 없다면?
+      copy.push(item);
+      setCurrentStatus("plus");
+    }
+    dispatch(setBookmarkList(copy));
+  };
+  const clickPop = () => {
+    setIsPop(true);
+  };
+  const closePop = () => {
+    setIsPop(false);
+    console.log(isPop);
+  };
+  useEffect(() => {
+    if (currentStatus !== "") {
+      setTimeout(() => {
+        setCurrentStatus("");
+      }, 3000);
+    }
+  }, [currentStatus]);
+  return (
+    <>
+      <ItemBox onClick={clickPop}>
+        <div
+          className="itemImg"
+          style={{
+            backgroundImage:
+              item.type === "Brand"
+                ? `url(${item.brand_image_url})`
+                : `url(${item.image_url})`,
+          }}
+        >
+          {/* <BtnLike onClick={wishAdd} className={isWish ? "on" : null}> */}
+          <BtnLike
+            onClick={wishAdd}
+            className={bookmarkList.some((x) => x.id === item.id) ? "on" : null}
+          >
+            <FaStar size={24} />
+          </BtnLike>
+        </div>
+        <div className="itemTxt">
+          {item.type === "Product" && (
+            <div className="product_area">
+              <p className="title">{item.title}</p>
+              <p className="priceBox">
+                <span className="discount">{item.discountPercentage}</span>
+                <span className="price">{item.price}</span>
+              </p>
+            </div>
+          )}
+          {item.type === "Category" && (
+            <div className="category_area">
+              <p className="title"># {item.title}</p>
+            </div>
+          )}
+          {item.type === "Exhibition" && (
+            <div className="exhibition_area">
+              <p className="title">{item.title}</p>
+              <span className="subTitle">{item.sub_title}</span>
+            </div>
+          )}
+          {item.type === "Brand" && (
+            <div className="brand_area">
+              <p className="title">{item.brand_name}</p>
+              <p className="customerBox">
+                <span>관심고객수</span>
+                <span className="follower">{item.follower}</span>
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="likePop">
+          {/* currentStatus가 plus면 위에꺼, minus면 아래꺼, ""이면 아무것도 안함 */}
+          {currentStatus === "plus" && (
+            <div className="chooseLike">
+              <FaStar size={16} />
+              <p>상품이 북마크에 추가되었습니다.</p>
+            </div>
+          )}
+          {currentStatus === "minus" && (
+            <div className="unChooseLike">
+              <FaStar size={16} />
+              <p>상품이 북마크에서 제거되었습니다.</p>
+            </div>
+          )}
+        </div>
+      </ItemBox>
+      {isPop && (
+        <ItemPopWrap onClick={closePop}>
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="itemPopImg"
+            style={{
+              backgroundImage:
+                item.type === "Brand"
+                  ? `url(${item.brand_image_url})`
+                  : `url(${item.image_url})`,
+            }}
+          >
+            <button className="closePop" onClick={closePop}>
+              <GrClose />
+            </button>
+            <div>
+              <BtnLike
+                onClick={wishAdd}
+                className={
+                  bookmarkList.some((x) => x.id === item.id) ? "on" : null
+                }
+              >
+                <FaStar size={24} />
+              </BtnLike>
+              <p>{item.title}</p>
+            </div>
+          </div>
+        </ItemPopWrap>
+      )}
+    </>
+  );
+};
+
 export default Item;

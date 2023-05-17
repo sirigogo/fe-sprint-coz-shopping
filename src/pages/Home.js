@@ -1,16 +1,21 @@
-import React from "react";
 import Item from "../components/global/Item";
-import { List } from "../styles/styles";
+import { Inner, ItemList } from "../styles/styles";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "../store";
 
+const MainTitle = styled.h3`
+  font-size: 24px;
+  margin: 24px 0 12px;
+`;
+
 const Home = () => {
   const dispatch = useDispatch();
   const [itemData, setItemData] = useState([]);
-  const { product } = useSelector((state) => state);
+  const { bookmarkList, product } = useSelector((state) => state);
+
   const getCozDate = async () => {
     try {
       const result = await axios.get(
@@ -23,37 +28,41 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("product", product);
-  }, [product]);
+  useEffect(() => {}, [product]);
   useEffect(() => {
     getCozDate();
   }, []);
+  useEffect(() => {
+    console.log(bookmarkList);
+  }, [bookmarkList]);
+
   return (
     <>
-      <div className="inner">
+      <Inner>
         <section className="itemList">
           <MainTitle>상품 리스트</MainTitle>
-          <List>
+          <ItemList>
             {itemData.map((item, idx) => {
               return <Item item={item} key={item.id} />;
             })}
-          </List>
+          </ItemList>
         </section>
-        <section className="itemList">
-          <MainTitle>북마크 리스트</MainTitle>
-          <List>
-            {itemData.map((item, idx) => {
-              return <Item item={item} key={item.id} />;
-            })}
-          </List>
-        </section>
-      </div>
+
+        {bookmarkList.length > 0 ? (
+          <section className="itemList">
+            <MainTitle>북마크 리스트</MainTitle>
+            <ItemList>
+              {bookmarkList.map((item, idx) => {
+                return <Item item={item} key={item.id} />;
+              })}
+            </ItemList>
+          </section>
+        ) : (
+          <p>북마크가 없습니다.</p>
+        )}
+      </Inner>
     </>
   );
 };
-const MainTitle = styled.h3`
-  font-size: 24px;
-  margin: 24px 0 12px;
-`;
+
 export default Home;
