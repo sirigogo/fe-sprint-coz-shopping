@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import Item from "../components/global/Item";
 import Filter from "../components/global/Filter";
 import { Inner, ItemList } from "../styles/styles";
+import { FaStar } from "react-icons/fa";
 const Bookmark = () => {
   const { bookmarkList } = useSelector((state) => state);
 
@@ -17,7 +18,10 @@ const Bookmark = () => {
           </ItemList>
         </>
       ) : (
-        <p>북마크가 없습니다.</p>
+        <p className="noBookmark">
+          <FaStar />
+          <span>찜한 상품이 없습니다.</span>
+        </p>
       )}
     </Inner>
   );

@@ -48,7 +48,7 @@ const Home = () => {
           </ItemList>
         </section>
 
-        {bookmarkList.length > 0 ? (
+        {bookmarkList.length > 0 && (
           <section className="itemList">
             <MainTitle>북마크 리스트</MainTitle>
             <ItemList>
@@ -57,8 +57,6 @@ const Home = () => {
               })}
             </ItemList>
           </section>
-        ) : (
-          <p>북마크가 없습니다.</p>
         )}
       </Inner>
     </>

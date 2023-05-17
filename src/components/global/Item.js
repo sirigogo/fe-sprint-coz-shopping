@@ -20,9 +20,33 @@ const ItemBox = styled.div`
     background-position: center;
     background-size: cover;
     position: relative;
+    button {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+    }
   }
   .itemTxt {
     padding-top: 6px;
+    .product_area {
+      .discount {
+        color: #452cdd;
+        font-size: 16px;
+        line-height: 19px;
+        font-weight: 800;
+      }
+    }
+    .exhibition_area {
+      .subTitle {
+        font-size: 16px;
+        line-height: 20px;
+      }
+    }
+    .brand_area {
+      span:not(.follower) {
+        font-weight: 700;
+      }
+    }
     > div:not(.exhibition_area) {
       display: flex;
       justify-content: space-between;
@@ -30,12 +54,14 @@ const ItemBox = styled.div`
         span {
           display: block;
           text-align: right;
+          line-height: 20px;
         }
       }
     }
     .title {
       font-family: "Inter", sans-serif;
       font-size: 16px;
+      line-height: 19px;
       color: #000;
       font-weight: 800;
     }
@@ -80,22 +106,43 @@ const ItemPopWrap = styled.div`
   .itemPopImg {
     width: 46.5rem;
     height: 30rem;
-    position: absolute;
+    position: relative;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 12px;
     background-position: center;
     background-size: cover;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+    .closePop {
+      cursor: pointer;
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      svg {
+        path {
+          stroke: rgb(255, 255, 255);
+        }
+      }
+    }
+    .popNameWrap {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 24px;
+        color: #fff;
+        font-weight: 700;
+        padding-left: 7px;
+      }
+    }
   }
 `;
-
 const BtnLike = styled.button`
   border: 0;
   background-color: transparent;
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
   z-index: 1;
   transition: all 0.2s;
   &.on {
@@ -169,8 +216,11 @@ const Item = ({ item }) => {
             <div className="product_area">
               <p className="title">{item.title}</p>
               <p className="priceBox">
-                <span className="discount">{item.discountPercentage}</span>
-                <span className="price">{item.price}</span>
+                <span className="discount">{item.discountPercentage}%</span>
+                <span className="price">
+                  {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  원
+                </span>
               </p>
             </div>
           )}
@@ -190,7 +240,11 @@ const Item = ({ item }) => {
               <p className="title">{item.brand_name}</p>
               <p className="customerBox">
                 <span>관심고객수</span>
-                <span className="follower">{item.follower}</span>
+                <span className="follower">
+                  {item.follower
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
               </p>
             </div>
           )}
@@ -225,9 +279,9 @@ const Item = ({ item }) => {
             }}
           >
             <button className="closePop" onClick={closePop}>
-              <GrClose />
+              <GrClose size={24} />
             </button>
-            <div>
+            <div className="popNameWrap">
               <BtnLike
                 onClick={wishAdd}
                 className={
