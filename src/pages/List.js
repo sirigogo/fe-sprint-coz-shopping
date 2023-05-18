@@ -5,15 +5,24 @@ import Item from "../components/global/Item";
 import Filter from "../components/global/Filter";
 import { Inner, ItemList } from "../styles/styles";
 import axios from "axios";
+import styled from "styled-components";
 import { setProduct } from "../store";
-import { current } from "@reduxjs/toolkit";
+import { useInView } from "react-intersection-observer";
+
+const EndMsg = styled.p`
+  padding: 20px 0;
+  text-align: center;
+  font-weight: 600;
+`;
 
 const List = ({ category, setCategory }) => {
   const param = useParams();
   const { product } = useSelector((state) => state);
-  const [itemData, setItemData] = useState([]);
-
+  const dispatch = useDispatch();
   const [filteredList, setFilteredList] = useState([]);
+  const [boxRef, inView] = useInView();
+  const [endPoint, setEndPoint] = useState(10);
+
   const getCozDate = async () => {
     let arr = [];
     try {
@@ -24,27 +33,48 @@ const List = ({ category, setCategory }) => {
     } catch (err) {
       console.log(err);
     }
-    setItemData(arr);
-    console.log(setItemData(arr));
+    dispatch(setProduct(arr));
   };
   useEffect(() => {
-    console.log(itemData);
     if (category === "All") {
-      setFilteredList(itemData);
+      setFilteredList(product);
     } else {
-      setFilteredList(itemData.filter((x) => x.type === category));
+      setFilteredList(product.filter((x) => x.type === category));
     }
-    getCozDate();
+  }, [product, category]);
+  useEffect(() => {
+    if (product.length !== 100) {
+      getCozDate();
+    }
+    return () => {
+      setCategory("All");
+    };
+  }, []);
+  useEffect(() => {
+    if (inView || product.length > endPoint) {
+      setEndPoint((prev) => prev + 10);
+    }
+  }, [inView]);
+  useEffect(() => {
+    setEndPoint(10);
   }, [category]);
+  // useEffect(() => {
+  //   console.log("inView", inView);
+  // }, [inView]);
   return (
     <Inner>
       <Filter category={category} setCategory={setCategory} />
       <ItemList>
-        {filteredList.map((v, idx) => {
+        {filteredList.slice(0, endPoint).map((v, idx) => {
           return <Item item={v} key={idx} />;
         })}
       </ItemList>
+      {product.length <= endPoint && (
+        <EndMsg>더 이상 표시할 목록이 없습니다.</EndMsg>
+      )}
+      <div ref={boxRef}></div>
     </Inner>
   );
 };
+
 export default List;

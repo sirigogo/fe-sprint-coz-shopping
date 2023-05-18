@@ -1,39 +1,37 @@
 import styled from "styled-components";
-
-const Filter = ({ category, setCategory }) => {
-  const FilterBtns = styled.ul`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 24px 0;
-    li {
-      margin: 0 18px;
-      cursor: pointer;
-      text-align: center;
-      &.on {
-        p {
-          font-weight: 700;
-          color: #412dd4;
-          border-bottom: 3px solid #412dd4;
-          display: inline-block;
-        }
-      }
-      button {
-        display: block;
-      }
-      img {
-        display: block;
-      }
+const FilterBtns = styled.ul`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+  li {
+    margin: 0 18px;
+    cursor: pointer;
+    text-align: center;
+    &.on {
       p {
-        font-size: 16px;
-        color: #000;
-        font-weight: 400;
-        line-height: 20px;
-        margin-top: 7px;
+        font-weight: 700;
+        color: #412dd4;
+        border-bottom: 3px solid #412dd4;
+        display: inline-block;
       }
     }
-  `;
-
+    button {
+      display: block;
+    }
+    img {
+      display: block;
+    }
+    p {
+      font-size: 16px;
+      color: #000;
+      font-weight: 400;
+      line-height: 20px;
+      margin-top: 7px;
+    }
+  }
+`;
+const Filter = ({ category, setCategory }) => {
   //[Product, Category,Exhibition, Brand]
   const onClickValue = (e) => {
     setCategory(e.currentTarget.value);

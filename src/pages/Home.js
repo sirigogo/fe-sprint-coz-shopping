@@ -13,24 +13,25 @@ const MainTitle = styled.h3`
 
 const Home = () => {
   const dispatch = useDispatch();
-  const [itemData, setItemData] = useState([]);
   const { bookmarkList, product } = useSelector((state) => state);
-
   const getCozDate = async () => {
+    let arr = [];
     try {
       const result = await axios.get(
-        "http://cozshopping.codestates-seb.link/api/v1/products?count=4"
+        "http://cozshopping.codestates-seb.link/api/v1/products"
       );
-      setItemData(result.data);
-      dispatch(setProduct(result.data));
+      arr = [...result.data, ...arr];
     } catch (err) {
       console.log(err);
     }
+    dispatch(setProduct(arr));
   };
 
   useEffect(() => {}, [product]);
   useEffect(() => {
-    getCozDate();
+    if (product.length !== 100) {
+      getCozDate();
+    }
   }, []);
   useEffect(() => {
     console.log(bookmarkList);
@@ -42,7 +43,7 @@ const Home = () => {
         <section className="itemList">
           <MainTitle>상품 리스트</MainTitle>
           <ItemList>
-            {itemData.map((item, idx) => {
+            {product.slice(0, 4).map((item, idx) => {
               return <Item item={item} key={item.id} />;
             })}
           </ItemList>
