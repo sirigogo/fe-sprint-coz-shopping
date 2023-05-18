@@ -11,8 +11,7 @@ import { current } from "@reduxjs/toolkit";
 const List = ({ category, setCategory }) => {
   const param = useParams();
   const { product } = useSelector((state) => state);
-  const [itemData, setItemData] = useState([]);
-
+  const dispatch = useDispatch();
   const [filteredList, setFilteredList] = useState([]);
   const getCozDate = async () => {
     let arr = [];
@@ -24,19 +23,21 @@ const List = ({ category, setCategory }) => {
     } catch (err) {
       console.log(err);
     }
-    setItemData(arr);
-    console.log(setItemData(arr));
+    dispatch(setProduct(arr));
   };
   useEffect(() => {
     console.log(category);
     if (category === "All") {
-      setFilteredList(itemData);
+      setFilteredList(product);
     } else {
-      setFilteredList(itemData.filter((x) => x.type === category));
+      setFilteredList(product.filter((x) => x.type === category));
     }
     getCozDate();
   }, [category]);
   useEffect(() => {
+    if (product.length !== 100) {
+      getCozDate();
+    }
     return () => {
       setCategory("All");
     };
