@@ -2,7 +2,11 @@
 body {
   background-color: #fff;
 }
-.inner {
-  width: 100%;
-  padding: 0 76px;
+.noBookmark {
+  display: flex;
+  padding: 20px 0 40px;
+  svg {
+    color: #dfdfdfcf;
+    margin-right: 5px;
+  }
 }

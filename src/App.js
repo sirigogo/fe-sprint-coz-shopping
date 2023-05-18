@@ -3,6 +3,10 @@ import "./styles/reset.scss";
 import "./styles/global.scss";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  padding-top: 80px;
+`;
+
 const App = () => {
   return (
     <>
@@ -12,7 +16,5 @@ const App = () => {
     </>
   );
 };
-const Wrapper = styled.div`
-  padding-top: 80px;
-`;
+
 export default App;

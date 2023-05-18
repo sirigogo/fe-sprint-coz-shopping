@@ -1,17 +1,5 @@
-import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-const Footer = () => {
-  return (
-    <FooterWrap>
-      <p>
-        <Link to="/list">개인정보 처리방침</Link>
-        <Link to="/bookmark">이용약관</Link>
-      </p>
-      <p>All rights reserved &copy; Codestates</p>
-    </FooterWrap>
-  );
-};
 const FooterWrap = styled.footer`
   width: 100%;
   height: 3.63rem;
@@ -30,4 +18,16 @@ const FooterWrap = styled.footer`
     }
   }
 `;
+const Footer = () => {
+  return (
+    <FooterWrap>
+      <p>
+        <Link to="/list">개인정보 처리방침</Link>
+        <Link to="/bookmark">이용약관</Link>
+      </p>
+      <p>All rights reserved &copy; Codestates</p>
+    </FooterWrap>
+  );
+};
+
 export default Footer;

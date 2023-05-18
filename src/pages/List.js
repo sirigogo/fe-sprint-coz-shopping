@@ -1,19 +1,50 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Item from "../components/global/Item";
-const List = () => {
+import Filter from "../components/global/Filter";
+import { Inner, ItemList } from "../styles/styles";
+import axios from "axios";
+import { setProduct } from "../store";
+import { current } from "@reduxjs/toolkit";
+
+const List = ({ category, setCategory }) => {
   const param = useParams();
   const { product } = useSelector((state) => state);
+  const [itemData, setItemData] = useState([]);
+
+  const [filteredList, setFilteredList] = useState([]);
+  const getCozDate = async () => {
+    let arr = [];
+    try {
+      const result = await axios.get(
+        "http://cozshopping.codestates-seb.link/api/v1/products"
+      );
+      arr = [...result.data, ...arr];
+    } catch (err) {
+      console.log(err);
+    }
+    setItemData(arr);
+    console.log(setItemData(arr));
+  };
+  useEffect(() => {
+    console.log(itemData);
+    if (category === "All") {
+      setFilteredList(itemData);
+    } else {
+      setFilteredList(itemData.filter((x) => x.type === category));
+    }
+    getCozDate();
+  }, [category]);
   return (
-    <>
-      <div>List</div>
-      <div>
-        {product.map((v, idx) => {
+    <Inner>
+      <Filter category={category} setCategory={setCategory} />
+      <ItemList>
+        {filteredList.map((v, idx) => {
           return <Item item={v} key={idx} />;
         })}
-      </div>
-    </>
+      </ItemList>
+    </Inner>
   );
 };
 export default List;
