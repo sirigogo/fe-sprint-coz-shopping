@@ -5,9 +5,15 @@ import Item from "../components/global/Item";
 import Filter from "../components/global/Filter";
 import { Inner, ItemList } from "../styles/styles";
 import axios from "axios";
+import styled from "styled-components";
 import { setProduct } from "../store";
-import { current } from "@reduxjs/toolkit";
 import { useInView } from "react-intersection-observer";
+
+const EndMsg = styled.p`
+  padding: 20px 0;
+  text-align: center;
+  font-weight: 600;
+`;
 
 const List = ({ category, setCategory }) => {
   const param = useParams();
@@ -15,6 +21,7 @@ const List = ({ category, setCategory }) => {
   const dispatch = useDispatch();
   const [filteredList, setFilteredList] = useState([]);
   const [boxRef, inView] = useInView();
+  const [endPoint, setEndPoint] = useState(10);
 
   const getCozDate = async () => {
     let arr = [];
@@ -26,7 +33,7 @@ const List = ({ category, setCategory }) => {
     } catch (err) {
       console.log(err);
     }
-    dispatch(setProduct(arr.slice(0, 10)));
+    dispatch(setProduct(arr));
   };
   useEffect(() => {
     if (category === "All") {
@@ -44,19 +51,27 @@ const List = ({ category, setCategory }) => {
     };
   }, []);
   useEffect(() => {
-    if (!inView) {
-      return;
+    if (inView || product.length > endPoint) {
+      setEndPoint((prev) => prev + 10);
     }
-    getCozDate();
   }, [inView]);
+  useEffect(() => {
+    setEndPoint(10);
+  }, [category]);
+  // useEffect(() => {
+  //   console.log("inView", inView);
+  // }, [inView]);
   return (
     <Inner>
       <Filter category={category} setCategory={setCategory} />
       <ItemList>
-        {filteredList.map((v, idx) => {
+        {filteredList.slice(0, endPoint).map((v, idx) => {
           return <Item item={v} key={idx} />;
         })}
       </ItemList>
+      {product.length <= endPoint && (
+        <EndMsg>더 이상 표시할 목록이 없습니다.</EndMsg>
+      )}
       <div ref={boxRef}></div>
     </Inner>
   );
