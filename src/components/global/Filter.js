@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Filter = ({ setCategory }) => {
+const Filter = ({ category, setCategory }) => {
   const FilterBtns = styled.ul`
     display: flex;
     align-items: center;
@@ -39,10 +39,9 @@ const Filter = ({ setCategory }) => {
     setCategory(e.currentTarget.value);
     console.log(e.currentTarget.value);
   };
-  const onClickBtn = () => {};
   return (
     <FilterBtns>
-      <li className="on">
+      <li className={category === "All" ? "on" : null}>
         <button value={"All"} onClick={onClickValue}>
           <img
             src={process.env.PUBLIC_URL + "/assets/img/filterAll.png"}
@@ -51,7 +50,7 @@ const Filter = ({ setCategory }) => {
           <p>전체</p>
         </button>
       </li>
-      <li>
+      <li className={category === "Product" ? "on" : null}>
         <button value={"Product"} onClick={onClickValue}>
           <img
             src={process.env.PUBLIC_URL + "/assets/img/filterProduct.png"}
@@ -60,7 +59,7 @@ const Filter = ({ setCategory }) => {
           <p>상품</p>
         </button>
       </li>
-      <li>
+      <li className={category === "Category" ? "on" : null}>
         <button value={"Category"} onClick={onClickValue}>
           <img
             src={process.env.PUBLIC_URL + "/assets/img/filterCategory.png"}
@@ -69,7 +68,7 @@ const Filter = ({ setCategory }) => {
           <p>카테고리</p>
         </button>
       </li>
-      <li>
+      <li className={category === "Exhibition" ? "on" : null}>
         <button value={"Exhibition"} onClick={onClickValue}>
           <img
             src={process.env.PUBLIC_URL + "/assets/img/filterExhibition.png"}
@@ -78,7 +77,7 @@ const Filter = ({ setCategory }) => {
           <p>기획전</p>
         </button>
       </li>
-      <li>
+      <li className={category === "Brand" ? "on" : null}>
         <button value={"Brand"} onClick={onClickValue}>
           <img
             src={process.env.PUBLIC_URL + "/assets/img/filterBrand.png"}

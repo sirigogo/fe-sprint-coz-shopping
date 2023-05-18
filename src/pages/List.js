@@ -8,7 +8,7 @@ import axios from "axios";
 import { setProduct } from "../store";
 import { current } from "@reduxjs/toolkit";
 
-const List = () => {
+const List = ({ category, setCategory }) => {
   const param = useParams();
   const { product } = useSelector((state) => state);
   const [itemData, setItemData] = useState([]);
@@ -38,7 +38,7 @@ const List = () => {
   }, [category]);
   return (
     <Inner>
-      <Filter setCategory={setCategory} />
+      <Filter category={category} setCategory={setCategory} />
       <ItemList>
         {filteredList.map((v, idx) => {
           return <Item item={v} key={idx} />;
