@@ -32,8 +32,7 @@ const List = ({ category, setCategory }) => {
     } else {
       setFilteredList(product.filter((x) => x.type === category));
     }
-    getCozDate();
-  }, [category]);
+  }, [product, category]);
   useEffect(() => {
     if (product.length !== 100) {
       getCozDate();
