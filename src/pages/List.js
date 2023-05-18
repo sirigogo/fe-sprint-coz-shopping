@@ -28,7 +28,7 @@ const List = ({ category, setCategory }) => {
     console.log(setItemData(arr));
   };
   useEffect(() => {
-    console.log(itemData);
+    console.log(category);
     if (category === "All") {
       setFilteredList(itemData);
     } else {
@@ -36,6 +36,11 @@ const List = ({ category, setCategory }) => {
     }
     getCozDate();
   }, [category]);
+  useEffect(() => {
+    return () => {
+      setCategory("All");
+    };
+  }, []);
   return (
     <Inner>
       <Filter category={category} setCategory={setCategory} />
@@ -47,4 +52,5 @@ const List = ({ category, setCategory }) => {
     </Inner>
   );
 };
+
 export default List;
