@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 const Filter = ({ setCategory }) => {
   const FilterBtns = styled.ul`
@@ -37,7 +36,8 @@ const Filter = ({ setCategory }) => {
 
   //[Product, Category,Exhibition, Brand]
   const onClickValue = (e) => {
-    console.log(e.target.value);
+    setCategory(e.currentTarget.value);
+    console.log(e.currentTarget.value);
   };
   const onClickBtn = () => {};
   return (

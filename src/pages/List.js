@@ -6,35 +6,41 @@ import Filter from "../components/global/Filter";
 import { Inner, ItemList } from "../styles/styles";
 import axios from "axios";
 import { setProduct } from "../store";
+import { current } from "@reduxjs/toolkit";
 
 const List = () => {
   const param = useParams();
   const { product } = useSelector((state) => state);
   const [itemData, setItemData] = useState([]);
-  const [category, setCategory] = useState("All");
+
+  const [filteredList, setFilteredList] = useState([]);
   const getCozDate = async () => {
     let arr = [];
-    for (let i = 0; i < 10; i++) {
-      try {
-        const result = await axios.get(
-          "http://cozshopping.codestates-seb.link/api/v1/products?count=10"
-        );
-        arr = [...result.data, ...arr];
-      } catch (err) {
-        console.log(err);
-        break;
-      }
+    try {
+      const result = await axios.get(
+        "http://cozshopping.codestates-seb.link/api/v1/products"
+      );
+      arr = [...result.data, ...arr];
+    } catch (err) {
+      console.log(err);
     }
     setItemData(arr);
+    console.log(setItemData(arr));
   };
   useEffect(() => {
+    console.log(itemData);
+    if (category === "All") {
+      setFilteredList(itemData);
+    } else {
+      setFilteredList(itemData.filter((x) => x.type === category));
+    }
     getCozDate();
-  }, []);
+  }, [category]);
   return (
     <Inner>
-      <Filter />
+      <Filter setCategory={setCategory} />
       <ItemList>
-        {itemData.map((v, idx) => {
+        {filteredList.map((v, idx) => {
           return <Item item={v} key={idx} />;
         })}
       </ItemList>
