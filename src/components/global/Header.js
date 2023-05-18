@@ -32,9 +32,24 @@ const HeaderWrap = styled.header`
     }
     .hm {
       width: 34px;
-      height: 24px;
+      height: 25px;
       position: relative;
       cursor: pointer;
+      &.on {
+        span {
+          &:first-child {
+            top: 50%;
+            transform: rotate(45deg) translateY(-50%);
+          }
+          &:nth-child(2n) {
+            display: none;
+          }
+          &:last-child {
+            top: 50%;
+            transform: rotate(-45deg) translateY(-50%);
+          }
+        }
+      }
       span {
         position: absolute;
         width: 100%;
@@ -42,6 +57,7 @@ const HeaderWrap = styled.header`
         background-color: #000;
         border-radius: 10px;
         left: 0;
+        transition: all 0.2s;
         &:first-child {
           top: 0;
         }
@@ -124,7 +140,7 @@ const Header = () => {
             <span>COZ Shopping</span>
           </Link>
         </h1>
-        <div className="hm" onClick={clickHm}>
+        <div className={isShowing ? "hm on" : "hm"} onClick={clickHm}>
           <span></span>
           <span></span>
           <span></span>
