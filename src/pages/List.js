@@ -7,12 +7,15 @@ import { Inner, ItemList } from "../styles/styles";
 import axios from "axios";
 import { setProduct } from "../store";
 import { current } from "@reduxjs/toolkit";
+import { useInView } from "react-intersection-observer";
 
 const List = ({ category, setCategory }) => {
   const param = useParams();
   const { product } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [filteredList, setFilteredList] = useState([]);
+  const [boxRef, inView] = useInView();
+
   const getCozDate = async () => {
     let arr = [];
     try {
@@ -23,10 +26,9 @@ const List = ({ category, setCategory }) => {
     } catch (err) {
       console.log(err);
     }
-    dispatch(setProduct(arr));
+    dispatch(setProduct(arr.slice(0, 10)));
   };
   useEffect(() => {
-    console.log(category);
     if (category === "All") {
       setFilteredList(product);
     } else {
@@ -41,6 +43,12 @@ const List = ({ category, setCategory }) => {
       setCategory("All");
     };
   }, []);
+  useEffect(() => {
+    if (!inView) {
+      return;
+    }
+    getCozDate();
+  }, [inView]);
   return (
     <Inner>
       <Filter category={category} setCategory={setCategory} />
@@ -49,6 +57,7 @@ const List = ({ category, setCategory }) => {
           return <Item item={v} key={idx} />;
         })}
       </ItemList>
+      <div ref={boxRef}></div>
     </Inner>
   );
 };
