@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export const ItemList = styled.div`
-  display: flex;
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
   &:last-child {
     margin-bottom: 20px;
   }

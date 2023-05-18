@@ -8,6 +8,9 @@ import { setBookmarkList } from "../../store/bookmarkList";
 const ItemBox = styled.div`
   width: calc((100% - 72px) / 4);
   margin-right: 24px;
+  float: left;
+  margin-bottom: 24px;
+  height: 264px;
   &:nth-child(4n) {
     margin-right: 0;
   }
@@ -182,7 +185,6 @@ const Item = ({ item }) => {
   };
   const closePop = () => {
     setIsPop(false);
-    console.log(isPop);
   };
   useEffect(() => {
     if (currentStatus !== "") {
