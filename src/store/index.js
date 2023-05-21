@@ -1,6 +1,7 @@
 import { configureStore, createSlice, current } from "@reduxjs/toolkit";
 import sample from "./sample";
 import bookmarkList from "./bookmarkList";
+import user from "./user";
 let product = createSlice({
   name: "product",
   initialState: [],
@@ -19,5 +20,6 @@ export const store = configureStore({
     product: product.reducer,
     sample: sample.reducer,
     bookmarkList: bookmarkList.reducer,
+    user: user.reducer,
   },
 });
