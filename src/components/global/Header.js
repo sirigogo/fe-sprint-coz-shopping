@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { BsStar } from "react-icons/bs";
 import { SlPresent } from "react-icons/sl";
 import { Inner } from "../../styles/styles";
+import { useSelector } from "react-redux";
+import BtnKakao from "../BtnKakao";
 const HeaderWrap = styled.header`
   position: fixed;
   top: 0;
@@ -32,9 +34,22 @@ const HeaderWrap = styled.header`
     }
     .hm {
       width: 34px;
-      height: 24px;
+      height: 25px;
       position: relative;
       cursor: pointer;
+      &.on {
+        span {
+          &:first-child {
+            transform: translateY(-50%) rotate(45deg);
+          }
+          &:nth-child(2n) {
+            opacity: 0;
+          }
+          &:last-child {
+            transform: translateY(-50%) rotate(-45deg);
+          }
+        }
+      }
       span {
         position: absolute;
         width: 100%;
@@ -42,15 +57,16 @@ const HeaderWrap = styled.header`
         background-color: #000;
         border-radius: 10px;
         left: 0;
+        top: 50%;
+        transition: all 0.2s;
         &:first-child {
-          top: 0;
+          transform: translateY(-50%) translateY(-10px);
         }
         &:nth-child(2n) {
-          top: 50%;
-          transform: translateY(-50%);
+          transform: translateY(-50%) translateY(0px);
         }
         &:last-child {
-          top: 100%;
+          transform: translateY(-50%) translateY(10px);
         }
       }
     }
@@ -97,18 +113,21 @@ const HeaderWrap = styled.header`
   }
 `;
 const Header = () => {
-  const userMenu = useRef();
+  const userMenu = useRef(null);
+  const hmRef = useRef(null);
   const [isShowing, setIsShowing] = useState(false);
-  const clickHm = () => {
-    setIsShowing(!isShowing);
-  };
+  const { user } = useSelector((state) => state);
   const clickBody = (e) => {
-    if (isShowing && !userMenu.current.contains(e.target)) setIsShowing();
+    if (!isShowing && hmRef.current.contains(e.target)) {
+      isShowing ? setIsShowing(false) : setIsShowing(true);
+    } else {
+      setIsShowing(false);
+    }
   };
   useEffect(() => {
-    window.addEventListener("mousedown", clickBody);
+    window.addEventListener("click", clickBody);
     return () => {
-      window.removeEventListener("mousedown", clickBody);
+      window.removeEventListener("click", clickBody);
     };
   }, [isShowing]);
   return (
@@ -124,7 +143,7 @@ const Header = () => {
             <span>COZ Shopping</span>
           </Link>
         </h1>
-        <div className="hm" onClick={clickHm}>
+        <div className={isShowing ? "hm on" : "hm"} ref={hmRef}>
           <span></span>
           <span></span>
           <span></span>
@@ -137,9 +156,20 @@ const Header = () => {
               className="popCursor"
             />
             <ul>
-              <li>
-                <Link to="/">OOO님, 안녕하세요!</Link>
-              </li>
+              {user.isLoggedIn ? (
+                <li>
+                  <Link to="/">{user.userInfo.nickname}님 안녕하세요.</Link>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/">홈으로</Link>
+                  </li>
+                  <li>
+                    <BtnKakao />
+                  </li>
+                </>
+              )}
               <li>
                 <Link to="/list">
                   <SlPresent size="18" />

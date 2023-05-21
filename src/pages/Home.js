@@ -13,7 +13,8 @@ const MainTitle = styled.h3`
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { bookmarkList, product } = useSelector((state) => state);
+  const { bookmarkList, product, user } = useSelector((state) => state);
+
   const getCozDate = async () => {
     let arr = [];
     try {
@@ -34,8 +35,8 @@ const Home = () => {
     }
   }, []);
   useEffect(() => {
-    console.log(bookmarkList);
-  }, [bookmarkList]);
+    console.log(user);
+  }, [user]);
 
   return (
     <>
