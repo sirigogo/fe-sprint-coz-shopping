@@ -55,7 +55,7 @@ const Kakao = () => {
   }, [user]);
   return (
     <>
-      <div>asdfasdasdf</div>
+      <div>로그인 되었습니다</div>
     </>
   );
 };

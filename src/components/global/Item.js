@@ -169,9 +169,9 @@ const Item = ({ item }) => {
   const wishAdd = (e) => {
     e.stopPropagation();
     let copy = [...bookmarkList];
-    if (copy.some((x) => x.id === item.id)) {
+    if (copy.some((ele) => ele.id === item.id)) {
       // 이미 있다면?
-      copy = copy.filter((x) => x.id !== item.id);
+      copy = copy.filter((ele) => ele.id !== item.id);
       setCurrentStatus("minus");
     } else {
       // 없다면?
@@ -185,6 +185,9 @@ const Item = ({ item }) => {
   };
   const closePop = () => {
     setIsPop(false);
+  };
+  const numSet = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   useEffect(() => {
     if (currentStatus !== "") {
@@ -219,10 +222,7 @@ const Item = ({ item }) => {
               <p className="title">{item.title}</p>
               <p className="priceBox">
                 <span className="discount">{item.discountPercentage}%</span>
-                <span className="price">
-                  {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                  원
-                </span>
+                <span className="price">{numSet(item.price)}원</span>
               </p>
             </div>
           )}
@@ -242,11 +242,7 @@ const Item = ({ item }) => {
               <p className="title">{item.brand_name}</p>
               <p className="customerBox">
                 <span>관심고객수</span>
-                <span className="follower">
-                  {item.follower
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </span>
+                <span className="follower">{numSet(item.follower)}</span>
               </p>
             </div>
           )}
