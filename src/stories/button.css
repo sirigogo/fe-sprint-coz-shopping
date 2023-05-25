@@ -1,0 +1,15 @@
+.storybook-button {
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  background-color: transparent;
+}
+
+.storybook-button--primary svg {
+  color: rebeccapurple;
+}
+
+.storybook-button--secondary svg {
+  color: aqua;
+}
