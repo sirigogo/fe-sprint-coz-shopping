@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import queryString from "query-string";
 import axios from "axios";
@@ -55,7 +55,7 @@ const Kakao = () => {
   }, [user]);
   return (
     <>
-      <div>asdfasdasdf</div>
+      <div>로그인 되었습니다</div>
     </>
   );
 };

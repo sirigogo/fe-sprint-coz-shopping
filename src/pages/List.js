@@ -39,7 +39,7 @@ const List = ({ category, setCategory }) => {
     if (category === "All") {
       setFilteredList(product);
     } else {
-      setFilteredList(product.filter((x) => x.type === category));
+      setFilteredList(product.filter((item) => item.type === category));
     }
   }, [product, category]);
   useEffect(() => {
@@ -65,8 +65,8 @@ const List = ({ category, setCategory }) => {
     <Inner>
       <Filter category={category} setCategory={setCategory} />
       <ItemList>
-        {filteredList.slice(0, endPoint).map((v, idx) => {
-          return <Item item={v} key={idx} />;
+        {filteredList.slice(0, endPoint).map((ele, idx) => {
+          return <Item item={ele} key={idx} />;
         })}
       </ItemList>
       {product.length <= endPoint && (

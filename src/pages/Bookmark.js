@@ -11,7 +11,7 @@ const Bookmark = ({ category, setCategory }) => {
     if (category === "All") {
       setFilteredList(bookmarkList);
     } else {
-      setFilteredList(bookmarkList.filter((x) => x.type === category));
+      setFilteredList(bookmarkList.filter((item) => item.type === category));
     }
   }, [category]);
   return (
@@ -20,8 +20,8 @@ const Bookmark = ({ category, setCategory }) => {
         <>
           <Filter category={category} setCategory={setCategory} />
           <ItemList>
-            {filteredList.map((v) => {
-              return <Item item={v} />;
+            {filteredList.map((ele) => {
+              return <Item item={ele} />;
             })}
           </ItemList>
         </>
