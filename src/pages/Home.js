@@ -14,7 +14,7 @@ const MainTitle = styled.h3`
 const Home = () => {
   const dispatch = useDispatch();
   const { bookmarkList, product, user } = useSelector((state) => state);
-  const itemShowCount = 4;
+
   const getCozDate = async () => {
     let arr = [];
     try {
@@ -44,7 +44,7 @@ const Home = () => {
         <section className="itemList">
           <MainTitle>상품 리스트</MainTitle>
           <ItemList>
-            {product.slice(0, itemShowCount).map((item, idx) => {
+            {product.slice(0, 4).map((item, idx) => {
               return <Item item={item} key={item.id} />;
             })}
           </ItemList>
@@ -54,7 +54,7 @@ const Home = () => {
           <section className="itemList">
             <MainTitle>북마크 리스트</MainTitle>
             <ItemList>
-              {bookmarkList.slice(0, itemShowCount).map((item, idx) => {
+              {bookmarkList.map((item, idx) => {
                 return <Item item={item} key={item.id} />;
               })}
             </ItemList>
