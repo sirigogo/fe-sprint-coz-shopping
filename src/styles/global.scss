@@ -2,28 +2,14 @@
 body {
   background-color: #fff;
 }
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
 .noBookmark {
   display: flex;
   padding: 40px 0 40px;
   svg {
     color: #dfdfdfcf;
     margin-right: 5px;
-  }
-}
-
-.likebutton {
-  border: 0;
-  background-color: transparent;
-  z-index: 1;
-  transition: all 0.2s;
-  &.on {
-    svg {
-      color: #ffd361;
-    }
-  }
-  svg {
-    cursor: pointer;
-    color: #dfdfdf;
-    filter: drop-shadow(rgba(0, 0, 0, 0.2) 3px 4px 3px);
   }
 }

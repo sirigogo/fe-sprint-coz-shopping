@@ -1,8 +1,6 @@
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { setBookmarkList } from "../store/bookmarkList";
-import { FaStar } from "react-icons/fa";
-import { Button } from "../stories/Button";
+import { Button } from "../stories/bookbutton/Button";
 
 const LikeButton = ({ item, setCurrentStatus }) => {
   const dispatch = useDispatch();
@@ -26,8 +24,8 @@ const LikeButton = ({ item, setCurrentStatus }) => {
       onClick={wishAdd}
       className={
         bookmarkList.some((ele) => ele.id === item.id)
-          ? "likebutton on"
-          : "likebutton"
+          ? "storybook-button--primary"
+          : "storybook-button--secondary"
       }
     />
   );
