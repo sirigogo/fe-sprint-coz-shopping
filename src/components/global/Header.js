@@ -91,6 +91,9 @@ const HeaderWrap = styled.header`
           align-items: center;
           height: 50px;
           border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+          &:first-child {
+            padding-left: 10px;
+          }
           &:last-child {
             border-bottom: 0px;
           }
@@ -159,6 +162,9 @@ const Header = () => {
                 </li>
               ) : (
                 <>
+                  <li>
+                    <Link to="/">홈으로</Link>
+                  </li>
                   <li>
                     <BtnKakao />
                   </li>

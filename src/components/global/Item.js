@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
-import LikeButton from "../LikeButton";
+import { setBookmarkList } from "../../store/bookmarkList";
 
 const ItemBox = styled.div`
   width: calc((100% - 72px) / 4);
@@ -142,21 +143,48 @@ const ItemPopWrap = styled.div`
     }
   }
 `;
+const BtnLike = styled.button`
+  border: 0;
+  background-color: transparent;
+  z-index: 1;
+  transition: all 0.2s;
+  &.on {
+    svg {
+      color: #ffd361;
+    }
+  }
+  svg {
+    cursor: pointer;
+    color: #dfdfdf;
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 3px 4px 3px);
+  }
+`;
 
 const Item = ({ item }) => {
   //[Product, Category,Exhibition, Brand]
-
+  const dispatch = useDispatch();
+  const { bookmarkList } = useSelector((state) => state);
   const [currentStatus, setCurrentStatus] = useState("");
   const [isPop, setIsPop] = useState(false);
-
+  const wishAdd = (e) => {
+    e.stopPropagation();
+    let copy = [...bookmarkList];
+    if (copy.some((x) => x.id === item.id)) {
+      // 이미 있다면?
+      copy = copy.filter((x) => x.id !== item.id);
+      setCurrentStatus("minus");
+    } else {
+      // 없다면?
+      copy.push(item);
+      setCurrentStatus("plus");
+    }
+    dispatch(setBookmarkList(copy));
+  };
   const clickPop = () => {
     setIsPop(true);
   };
   const closePop = () => {
     setIsPop(false);
-  };
-  const numSet = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   useEffect(() => {
     if (currentStatus !== "") {
@@ -178,7 +206,12 @@ const Item = ({ item }) => {
           }}
         >
           {/* <BtnLike onClick={wishAdd} className={isWish ? "on" : null}> */}
-          <LikeButton item={item} setCurrentStatus={setCurrentStatus} />
+          <BtnLike
+            onClick={wishAdd}
+            className={bookmarkList.some((x) => x.id === item.id) ? "on" : null}
+          >
+            <FaStar size={24} />
+          </BtnLike>
         </div>
         <div className="itemTxt">
           {item.type === "Product" && (
@@ -186,7 +219,10 @@ const Item = ({ item }) => {
               <p className="title">{item.title}</p>
               <p className="priceBox">
                 <span className="discount">{item.discountPercentage}%</span>
-                <span className="price">{numSet(item.price)}원</span>
+                <span className="price">
+                  {item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  원
+                </span>
               </p>
             </div>
           )}
@@ -206,7 +242,11 @@ const Item = ({ item }) => {
               <p className="title">{item.brand_name}</p>
               <p className="customerBox">
                 <span>관심고객수</span>
-                <span className="follower">{numSet(item.follower)}</span>
+                <span className="follower">
+                  {item.follower
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </span>
               </p>
             </div>
           )}
@@ -240,20 +280,18 @@ const Item = ({ item }) => {
                   : `url(${item.image_url})`,
             }}
           >
-            {/* <LikeButton className="closePop" onClick={closePop}>
+            <button className="closePop" onClick={closePop}>
               <GrClose size={24} />
-            </LikeButton> */}
+            </button>
             <div className="popNameWrap">
-              {/* <BtnLike
+              <BtnLike
                 onClick={wishAdd}
                 className={
                   bookmarkList.some((x) => x.id === item.id) ? "on" : null
                 }
               >
                 <FaStar size={24} />
-              </BtnLike> */}
-              {/* <Button item={item} setCurrentStatus={setCurrentStatus} /> */}
-              <LikeButton item={item} setCurrentStatus={setCurrentStatus} />
+              </BtnLike>
               <p>{item.title}</p>
             </div>
           </div>
